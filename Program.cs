@@ -8,6 +8,10 @@ builder.Services.AddDbContext<MainDbContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Logging setting
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

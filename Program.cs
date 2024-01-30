@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using HobbyCollection.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<MainDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MainDbContext") ?? throw new InvalidOperationException("Connection string 'MainDbContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -15,5 +15,6 @@ namespace HobbyCollection.Data
         }
 
         public DbSet<HobbyCollection.Models.Favorite> Favorite { get; set; } = default!;
+        public DbSet<HobbyCollection.Models.User> User { get; set; } = default!;
     }
 }

@@ -10,22 +10,22 @@ using HobbyCollection.Models;
 
 namespace HobbyCollection.Controllers
 {
-    public class FavoritesController : Controller
+    public class UsersController : Controller
     {
         private readonly MainDbContext _context;
 
-        public FavoritesController(MainDbContext context)
+        public UsersController(MainDbContext context)
         {
             _context = context;
         }
 
-        // GET: Favorites
+        // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Favorite.ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
-        // GET: Favorites/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +33,40 @@ namespace HobbyCollection.Controllers
                 return NotFound();
             }
 
-            var favorite = await _context.Favorite
+            var user = await _context.User
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (favorite == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(favorite);
+            return View(user);
         }
 
-        // GET: Favorites/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Favorites/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Price,Image")] Favorite favorite)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Password")] User user)
         {
             if (ModelState.IsValid)
             {
-                favorite.UserId = 1;
-                favorite.CreateDate = DateTime.UtcNow;
-
-                _context.Add(favorite);
+                user.CreateDate = DateTime.UtcNow;
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(favorite);
+            return View(user);
         }
 
-        // GET: Favorites/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +74,22 @@ namespace HobbyCollection.Controllers
                 return NotFound();
             }
 
-            var favorite = await _context.Favorite.FindAsync(id);
-            if (favorite == null)
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(favorite);
+            return View(user);
         }
 
-        // POST: Favorites/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Name,Description,Price,Image")] Favorite favoriteToUpdate)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Password")] User userToUpdate)
         {
-            if (id != favoriteToUpdate.Id)
+            if (id != userToUpdate.Id)
             {
                 return NotFound();
             }
@@ -100,23 +98,22 @@ namespace HobbyCollection.Controllers
             {
                 try
                 {
-                    var favorite = await _context.Favorite.FindAsync(id);
-                    if (favorite == null)
+                    var user = await _context.User.FindAsync(id);
+                    if (user == null)
                     {
                         return NotFound();
                     }
 
-                    favorite.Name = favoriteToUpdate.Name;
-                    favorite.Description = favoriteToUpdate.Description;
-                    favorite.Price = favoriteToUpdate.Price;
-                    favorite.Image = favoriteToUpdate.Image;
-                    favorite.UpdateDate = DateTime.UtcNow;
-                    _context.Update(favorite);
+                    user.UserName = userToUpdate.UserName;
+                    user.Email = userToUpdate.Email;
+                    user.Password = userToUpdate.Password;
+                    user.UpdateDate = DateTime.UtcNow;
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FavoriteExists(favoriteToUpdate.Id))
+                    if (!UserExists(userToUpdate.Id))
                     {
                         return NotFound();
                     }
@@ -127,10 +124,10 @@ namespace HobbyCollection.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(favoriteToUpdate);
+            return View(userToUpdate);
         }
 
-        // GET: Favorites/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,34 +135,34 @@ namespace HobbyCollection.Controllers
                 return NotFound();
             }
 
-            var favorite = await _context.Favorite
+            var user = await _context.User
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (favorite == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(favorite);
+            return View(user);
         }
 
-        // POST: Favorites/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var favorite = await _context.Favorite.FindAsync(id);
-            if (favorite != null)
+            var user = await _context.User.FindAsync(id);
+            if (user != null)
             {
-                _context.Favorite.Remove(favorite);
+                _context.User.Remove(user);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FavoriteExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Favorite.Any(e => e.Id == id);
+            return _context.User.Any(e => e.Id == id);
         }
     }
 }

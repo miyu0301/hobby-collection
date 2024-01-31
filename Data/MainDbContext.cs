@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HobbyCollection.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HobbyCollection.Data
 {
-    public class MainDbContext : DbContext
+    public class MainDbContext : IdentityDbContext
     {
-        public MainDbContext (DbContextOptions<MainDbContext> options)
+        public MainDbContext(DbContextOptions<MainDbContext> options)
             : base(options)
         {
         }

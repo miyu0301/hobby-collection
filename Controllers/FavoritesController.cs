@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HobbyCollection.Data;
 using HobbyCollection.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace HobbyCollection.Controllers
 {
     public class FavoritesController : Controller
     {
         private readonly MainDbContext _context;
+        private readonly ILogger<HomeController> _logger;
 
-        public FavoritesController(MainDbContext context)
+        public FavoritesController(MainDbContext context, ILogger<HomeController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Favorites
@@ -56,14 +60,29 @@ namespace HobbyCollection.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Price,Image")] Favorite favorite)
         {
+            // prevent be validated before insert
+            ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
-                favorite.UserId = 1;
+                // string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                // favorite.UserId = userId;
+                favorite.UserId = "dummy";
                 favorite.CreateDate = DateTime.UtcNow;
 
                 _context.Add(favorite);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                foreach (var entry in ModelState)
+                {
+                    if (entry.Value.Errors.Count > 0)
+                    {
+                        // ここでエラー詳細を確認
+                        Console.WriteLine($"{entry.Key}: {string.Join(", ", entry.Value.Errors.Select(e => e.ErrorMessage))}");
+                    }
+                }
             }
             return View(favorite);
         }

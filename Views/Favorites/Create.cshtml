@@ -1,4 +1,4 @@
-@model HobbyCollection.Models.Favorite
+@model HobbyCollection.Models.FavoriteCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,24 +13,28 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Favorite.Name" class="control-label"></label>
+                <input asp-for="Favorite.Name" class="form-control" />
+                <span asp-validation-for="Favorite.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="SelectedTagIds" class="control-label"></label>
+                <select asp-for="SelectedTagIds" asp-items="Model.TagsList" multiple="multiple"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <label asp-for="Favorite.Description" class="control-label"></label>
+                <input asp-for="Favorite.Description" class="form-control" />
+                <span asp-validation-for="Favorite.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <label asp-for="Favorite.Price" class="control-label"></label>
+                <input asp-for="Favorite.Price" class="form-control" />
+                <span asp-validation-for="Favorite.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Favorite.Image" class="control-label"></label>
+                <input asp-for="Favorite.Image" class="form-control" />
+                <span asp-validation-for="Favorite.Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

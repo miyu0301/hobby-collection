@@ -1,4 +1,4 @@
-@model HobbyCollection.Models.Favorite
+@model HobbyCollection.Models.FavoriteDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,51 +10,58 @@
     <h4>Favorite</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
+        <h2>Tags</h2>
+        <ul>
+            @foreach (var tag in Model.TagsList)
+            {
+                <li>@tag.Name</li>
+            }
+        </ul>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.UserId)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.UserId)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.Name)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.Description)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.Description)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.Price)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.Price)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.Image)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Image)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.Image)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.CreateDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreateDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.CreateDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdateDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Favorite.UpdateDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdateDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Favorite.UpdateDate)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.Favorite.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -9,17 +9,20 @@ using HobbyCollection.Data;
 using HobbyCollection.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using HobbyCollection.Services;
 
 namespace HobbyCollection.Controllers
 {
     public class FavoritesController : Controller
     {
         private readonly MainDbContext _context;
+        private readonly IFavoritesService _service;
         private readonly ILogger<HomeController> _logger;
 
-        public FavoritesController(MainDbContext context, ILogger<HomeController> logger)
+        public FavoritesController(MainDbContext context, IFavoritesService service, ILogger<HomeController> logger)
         {
             _context = context;
+            _service = service;
             _logger = logger;
         }
 
@@ -44,13 +47,29 @@ namespace HobbyCollection.Controllers
                 return NotFound();
             }
 
-            return View(favorite);
+            var tags = await _context.FavoriteTagMappings
+                .Where(m => m.FavoriteId == id)
+                .Select(m => m.Tag)
+                .ToListAsync();
+
+            var viewModel = new FavoriteDetailsViewModel
+            {
+                Favorite = favorite,
+                TagsList = tags
+            };
+
+            return View(viewModel);
         }
 
         // GET: Favorites/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var viewModel = new FavoriteCreateViewModel
+            {
+                TagsList = await _service.getTagsList()
+            };
+
+            return View(viewModel);
         }
 
         // POST: Favorites/Create
@@ -58,19 +77,14 @@ namespace HobbyCollection.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Price,Image")] Favorite favorite)
+        public async Task<IActionResult> Create(FavoriteCreateViewModel viewModel)
         {
             // prevent be validated before insert
-            ModelState.Remove("UserId");
+            ModelState.Remove("Favorite.UserId");
+            ModelState.Remove("TagsList");
             if (ModelState.IsValid)
             {
-                // string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                // favorite.UserId = userId;
-                favorite.UserId = "dummy";
-                favorite.CreateDate = DateTime.UtcNow;
-
-                _context.Add(favorite);
-                await _context.SaveChangesAsync();
+                _service.insertFavorite(viewModel);
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -79,12 +93,11 @@ namespace HobbyCollection.Controllers
                 {
                     if (entry.Value.Errors.Count > 0)
                     {
-                        // ここでエラー詳細を確認
                         Console.WriteLine($"{entry.Key}: {string.Join(", ", entry.Value.Errors.Select(e => e.ErrorMessage))}");
                     }
                 }
             }
-            return View(favorite);
+            return View(viewModel);
         }
 
         // GET: Favorites/Edit/5
@@ -115,6 +128,8 @@ namespace HobbyCollection.Controllers
                 return NotFound();
             }
 
+            // prevent be validated before insert
+            ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
                 try

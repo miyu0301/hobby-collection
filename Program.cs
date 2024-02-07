@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using HobbyCollection.Data;
 using Microsoft.AspNetCore.Identity;
+using HobbyCollection.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MainDbContext>(options =>
@@ -52,6 +53,8 @@ builder.Services.AddControllersWithViews();
 // Logging setting
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+builder.Services.AddScoped<IFavoritesService, FavoritesService>();
 
 var app = builder.Build();
 

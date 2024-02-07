@@ -9,16 +9,19 @@ using HobbyCollection.Data;
 using HobbyCollection.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace HobbyCollection.Services
 {
     public class FavoritesService : IFavoritesService
     {
         private readonly MainDbContext _context;
-
-        public FavoritesService(MainDbContext context)
+        private readonly Cloudinary _cloudinary;
+        public FavoritesService(MainDbContext context, Cloudinary cloudinary)
         {
             _context = context;
+            _cloudinary = cloudinary;
         }
 
         public async Task<List<SelectListItem>> getTagsList()
@@ -31,10 +34,25 @@ namespace HobbyCollection.Services
 
         public async void insertFavorite(FavoriteCreateViewModel viewModel)
         {
+            Favorite favorite = viewModel.Favorite;
+
+            if (viewModel.ImageFile != null)
+            {
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(viewModel.ImageFile.FileName, viewModel.ImageFile.OpenReadStream()),
+                    UseFilename = true,
+                    UniqueFilename = false,
+                    Overwrite = true
+                };
+                var uploadResult = _cloudinary.Upload(uploadParams);
+                var url = uploadResult.Url.ToString();
+                favorite.Image = url;
+            }
+
             // string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // favorite.UserId = userId;
             viewModel.TagsList = await getTagsList();
-            Favorite favorite = viewModel.Favorite;
             favorite.UserId = "dummy";
             favorite.CreateDate = DateTime.UtcNow;
 

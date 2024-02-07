@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Favorite.Name" class="control-label"></label>
@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Favorite.Image" class="control-label"></label>
-                <input asp-for="Favorite.Image" class="form-control" />
+                <input asp-for="Favorite.Image" type="file" class="form-control" name="ImageFile" />
                 <span asp-validation-for="Favorite.Image" class="text-danger"></span>
             </div>
             <div class="form-group">

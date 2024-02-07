@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using HobbyCollection.Data;
 using Microsoft.AspNetCore.Identity;
 using HobbyCollection.Services;
+using CloudinaryDotNet;
+using dotenv.net;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MainDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MainDbContext") ?? throw new InvalidOperationException("Connection string 'MainDbContext' not found.")));
-
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -53,6 +53,16 @@ builder.Services.AddControllersWithViews();
 // Logging setting
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+// Cloudinary setting
+DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
+var cloudinaryAccount = new Account(
+    Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME"),
+    Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY"),
+    Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET")
+    );
+var cloudinary = new Cloudinary(cloudinaryAccount);
+builder.Services.AddSingleton(cloudinary);
 
 builder.Services.AddScoped<IFavoritesService, FavoritesService>();
 

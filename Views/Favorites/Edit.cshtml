@@ -4,53 +4,50 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>Favorite</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Favorite.Id" />
-            <div class="form-group">
-                <label asp-for="SelectedTagIds" class="control-label"></label>
-                <select asp-for="SelectedTagIds" data-val="false" asp-items="Model.TagsList"
-                    multiple="multiple"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Name" class="control-label"></label>
-                <input asp-for="Favorite.Name" class="form-control" />
-                <span asp-validation-for="Favorite.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Description" class="control-label"></label>
-                <input asp-for="Favorite.Description" class="form-control" />
-                <span asp-validation-for="Favorite.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Price" class="control-label"></label>
-                <input asp-for="Favorite.Price" class="form-control" />
-                <span asp-validation-for="Favorite.Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Image" class="control-label"></label>
-                <input asp-for="Favorite.Image" type="file" class="form-control" name="ImageFile" />
-                <span asp-validation-for="Favorite.Image" class="text-danger"></span>
-            </div>
-            <dd class="col-sm-10">
-                <img src="@Model.Favorite.Image" alt="Favorite Image" />
-            </dd>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="container">
+    <h1 class="my-3 my-md-5">Edit</h1>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Favorite.Id" />
+        <div class="col-md-6 form-group">
+            <label for="name">Name</label>
+            <input asp-for="Favorite.Name" class="form-control" />
+            <span asp-validation-for="Favorite.Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="price" class="mt-2">Price</label>
+            <input asp-for="Favorite.Price" class="form-control" />
+            <span asp-validation-for="Favorite.Price" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="name" class="mt-2">Type</label>
+            <select asp-for="SelectedTagIds" data-val="false" asp-items="Model.TagsList" multiple="multiple"></select>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="description" class="mt-2">Description</label>
+            <input asp-for="Favorite.Description" class="form-control" />
+            <span asp-validation-for="Favorite.Description" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="image" class="mt-2">Image</label>
+            @if (!string.IsNullOrEmpty(Model.Favorite.Image))
+            {
+                <img src="@Model.Favorite.Image" class="w-100 object-fit-cover mt-2" alt="Favorite Image"
+                    style="height: 300px;" />
+            }
+            <input asp-for="Favorite.Image" type="file" class="form-control" name="ImageFile" />
+            <span asp-validation-for="Favorite.Image" class="text-danger"></span>
+        </div>
+        <div class="d-flex gap-3 mt-4">
+            <input type="submit" value="Save" class="readmore" />
+            <a asp-action="Index" class="readmore">Back to List</a>
+        </div>
+    </form>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{

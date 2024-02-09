@@ -4,44 +4,39 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="container">
+    <h1 class="my-3 my-md-5">Create</h1>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="col-md-6 form-group">
+            <label for="name">Name</label>
+            <input asp-for="Favorite.Name" class="form-control" required />
+            <span asp-validation-for="Favorite.Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="price" class="mt-2">Price</label>
+            <input type="number" name="price" id="price" class="form-control">
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="name" class="mt-2">Type</label>
+            <select asp-for="SelectedTagIds" data-val="false" asp-items="Model.TagsList" multiple="multiple"></select>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="description" class="mt-2">Description</label>
+            <input asp-for="Favorite.Description" class="form-control" />
+            <span asp-validation-for="Favorite.Description" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="image" class="mt-2">Image</label>
+            <input asp-for="Favorite.Image" type="file" class="form-control" name="ImageFile" />
+            <span asp-validation-for="Favorite.Image" class="text-danger"></span>
+        </div>
+        <div class="d-flex gap-3 mt-4">
+            <input type="submit" value="Create" class="readmore" />
+            <a asp-action="Index" class="readmore">Back to List</a>
+        </div>
+    </form>
 
-<h4>Favorite</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Favorite.Name" class="control-label"></label>
-                <input asp-for="Favorite.Name" class="form-control" />
-                <span asp-validation-for="Favorite.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SelectedTagIds" class="control-label"></label>
-                <select asp-for="SelectedTagIds" data-val="false" asp-items="Model.TagsList"
-                    multiple="multiple"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Description" class="control-label"></label>
-                <input asp-for="Favorite.Description" class="form-control" />
-                <span asp-validation-for="Favorite.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Price" class="control-label"></label>
-                <input asp-for="Favorite.Price" class="form-control" />
-                <span asp-validation-for="Favorite.Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Favorite.Image" class="control-label"></label>
-                <input asp-for="Favorite.Image" type="file" class="form-control" name="ImageFile" />
-                <span asp-validation-for="Favorite.Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
 </div>
 
 <div>

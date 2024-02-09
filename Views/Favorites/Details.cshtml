@@ -6,62 +6,42 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Favorite</h4>
-    <hr />
-    <dl class="row">
-        <h2>Tags</h2>
-        <ul>
-            @foreach (var tag in Model.TagsList)
-            {
-                <li>@tag.Name</li>
-            }
-        </ul>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.UserId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Favorite.UserId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Favorite.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Favorite.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Favorite.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.Image)
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Model.Favorite.Image" alt="Favorite Image" />
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.CreateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Favorite.CreateDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Favorite.UpdateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Favorite.UpdateDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Favorite.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+    <div class="row align-items-stretch mt-3 mt-md-5">
+        <div class="col-md-8">
+            <img src="@(!string.IsNullOrEmpty(Model.Favorite.Image) ? Model.Favorite.Image : "/image/noimage.jpg")"
+                class="img-fluid" style="height: 300px;" alt="Favorite Image" />
+        </div>
+        <div class="col-md-3 ml-auto" data-aos-delay="100">
+            <div class="sticky-content">
+                <h2 class="h2">
+                    @Html.DisplayFor(model => model.Favorite.Name)
+                </h2>
+                <p class="mb-4">
+                <ul>
+                    @foreach (var tag in Model.TagsList)
+                        {
+                        <li><span class="text-muted">@tag.Name</span></li>
+                        }
+                </ul>
+                </p>
+                <p class="mb-4">$ @Html.DisplayFor(model => model.Favorite.Price)
+                </p>
+
+                <div class="mb-5">
+                    <p>
+                        @Html.DisplayFor(model => model.Favorite.Description)
+                    </p>
+                </div>
+                <div class="d-flex gap-3 mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model?.Favorite.Id" class="readmore">Edit</a>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@Model.Favorite.Id" />
+                        <input type="submit" value="Delete" class="readmore" />
+                    </form>
+                    <a asp-action="Index" class="readmore">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -4,68 +4,34 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>My Favorite List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdateDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <div class="my-3 my-md-5 d-flex justify-content-between align-items-center">
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    </div>
+    <div id="portfolio-grid" class="row no-gutter">
+        @foreach (var item in Model)
+        {
+            <div class="item web col-sm-6 col-md-4 col-lg-4 mb-4">
+                <a asp-action="Details" class="item-wrap fancybox" asp-route-id="@item.Id">
+                    <div class="work-info">
+                        <h3>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </h3>
+                        @* <span>
+                    @Html.DisplayFor(modelItem => item.Price)
+                    </span> *@
+                    </div>
+                    <img src="@(!string.IsNullOrEmpty(item.Image) ? item.Image : "/image/noimage.jpg")"
+                        class="w-100 object-fit-cover" style="height: 300px;" alt="Favorite Image" />
+                    @* <img src="@Html.DisplayFor(modelItem => item.Image)" class="w-100 object-fit-cover" style="height:
+                300px;" alt="Favorite Image" /> *@
+                </a>
+            </div>
+        }
+
+    </div>
+</div>

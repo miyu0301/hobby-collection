@@ -78,7 +78,7 @@ namespace HobbyCollection.Services
             if (viewModel.ImageFile != null)
             {
                 ImageUploadParams uploadParams;
-                if (favorite.Image != "/image/noimage.jpg")
+                if (!string.IsNullOrEmpty(favorite.Image))
                 {
                     var replacedImageId = Path.GetFileNameWithoutExtension(Path.GetFileName(favorite.Image));
                     uploadParams = new ImageUploadParams()

@@ -113,7 +113,21 @@ namespace HobbyCollection.Controllers
             {
                 return NotFound();
             }
-            return View(favorite);
+
+            var tags = await _context.FavoriteTagMappings.Where(t => t.FavoriteId == id).ToListAsync();
+            var selectedTagIds = new List<int>();
+            foreach (var tag in tags)
+            {
+                selectedTagIds.Add(tag.TagId);
+            }
+
+            var viewModel = new FavoriteEditViewModel
+            {
+                Favorite = favorite,
+                TagsList = await _service.getTagsList(),
+                SelectedTagIds = selectedTagIds
+            };
+            return View(viewModel);
         }
 
         // POST: Favorites/Edit/5
@@ -121,15 +135,16 @@ namespace HobbyCollection.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Name,Description,Price,Image")] Favorite favoriteToUpdate)
+        public async Task<IActionResult> Edit(int id, FavoriteEditViewModel viewModel)
         {
-            if (id != favoriteToUpdate.Id)
+            if (id != viewModel.Favorite.Id)
             {
                 return NotFound();
             }
 
             // prevent be validated before insert
-            ModelState.Remove("UserId");
+            ModelState.Remove("Favorite.UserId");
+            ModelState.Remove("TagsList");
             if (ModelState.IsValid)
             {
                 try
@@ -139,18 +154,12 @@ namespace HobbyCollection.Controllers
                     {
                         return NotFound();
                     }
-
-                    favorite.Name = favoriteToUpdate.Name;
-                    favorite.Description = favoriteToUpdate.Description;
-                    favorite.Price = favoriteToUpdate.Price;
-                    favorite.Image = favoriteToUpdate.Image;
-                    favorite.UpdateDate = DateTime.UtcNow;
-                    _context.Update(favorite);
-                    await _context.SaveChangesAsync();
+                    _service.updateFavorite(favorite, viewModel);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FavoriteExists(favoriteToUpdate.Id))
+                    if (!FavoriteExists(viewModel.Favorite.Id))
                     {
                         return NotFound();
                     }
@@ -159,9 +168,8 @@ namespace HobbyCollection.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(favoriteToUpdate);
+            return View(viewModel);
         }
 
         // GET: Favorites/Delete/5

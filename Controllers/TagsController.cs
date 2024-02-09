@@ -22,7 +22,7 @@ namespace HobbyCollection.Controllers
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tag.ToListAsync());
+            return View(await _context.Tag.Where(tag => !tag.DeleteFlag).ToListAsync());
         }
 
         // GET: Tags/Details/5
@@ -169,7 +169,8 @@ namespace HobbyCollection.Controllers
             var tag = await _context.Tag.FindAsync(id);
             if (tag != null)
             {
-                _context.Tag.Remove(tag);
+                tag.DeleteFlag = true;
+                _context.Tag.Update(tag);
             }
 
             await _context.SaveChangesAsync();

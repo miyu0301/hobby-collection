@@ -9,7 +9,7 @@ public class Favorite
   public required string Name { get; set; }
   public string? Description { get; set; }
   public decimal? Price { get; set; }
-  public string? Image { get; set; }
+  public string? Image { get; set; } = "/image/noimage.jpg";
   public DateTime CreateDate { get; set; }
   public DateTime? UpdateDate { get; set; }
 }

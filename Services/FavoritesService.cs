@@ -18,10 +18,12 @@ namespace HobbyCollection.Services
     {
         private readonly MainDbContext _context;
         private readonly Cloudinary _cloudinary;
-        public FavoritesService(MainDbContext context, Cloudinary cloudinary)
+        private readonly ILogger<FavoritesService> _logger;
+        public FavoritesService(MainDbContext context, Cloudinary cloudinary, ILogger<FavoritesService> logger)
         {
             _context = context;
             _cloudinary = cloudinary;
+            _logger = logger;
         }
 
         public async Task<List<SelectListItem>> getTagsList()
@@ -41,8 +43,8 @@ namespace HobbyCollection.Services
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(viewModel.ImageFile.FileName, viewModel.ImageFile.OpenReadStream()),
-                    UseFilename = true,
-                    UniqueFilename = false,
+                    UseFilename = false,
+                    UniqueFilename = true,
                     Overwrite = true
                 };
                 var uploadResult = _cloudinary.Upload(uploadParams);
@@ -70,6 +72,64 @@ namespace HobbyCollection.Services
             }
             await _context.SaveChangesAsync();
         }
+
+        public async void updateFavorite(Favorite favorite, FavoriteEditViewModel viewModel)
+        {
+            if (viewModel.ImageFile != null)
+            {
+                ImageUploadParams uploadParams;
+                if (favorite.Image != "/image/noimage.jpg")
+                {
+                    var replacedImageId = Path.GetFileNameWithoutExtension(Path.GetFileName(favorite.Image));
+                    uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(viewModel.ImageFile.FileName, viewModel.ImageFile.OpenReadStream()),
+                        PublicId = replacedImageId,
+                    };
+                    _cloudinary.Upload(uploadParams);
+                    favorite.Image = $"{favorite.Image}?v={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                }
+                else
+                {
+                    uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(viewModel.ImageFile.FileName, viewModel.ImageFile.OpenReadStream()),
+                        UseFilename = false,
+                        UniqueFilename = true,
+                        Overwrite = true
+                    };
+                    var uploadResult = _cloudinary.Upload(uploadParams);
+                    var url = uploadResult.Url.ToString();
+                    favorite.Image = url;
+                }
+            }
+
+            favorite.Name = viewModel.Favorite.Name;
+            favorite.Description = viewModel.Favorite.Description;
+            favorite.Price = viewModel.Favorite.Price;
+            favorite.UpdateDate = DateTime.UtcNow;
+            _context.Update(favorite);
+
+            var mappings = await _context.FavoriteTagMappings.Where(mp => mp.FavoriteId == favorite.Id).ToListAsync(); ;
+            if (mappings != null)
+            {
+                _context.FavoriteTagMappings.RemoveRange(mappings);
+            }
+
+            foreach (var tagId in viewModel.SelectedTagIds)
+            {
+                _context.Add(new FavoriteTagMappings
+                {
+                    FavoriteId = favorite.Id,
+                    TagId = tagId,
+                    CreateDate = DateTime.UtcNow
+                });
+            }
+            await _context.SaveChangesAsync();
+
+
+        }
+
 
     }
 }

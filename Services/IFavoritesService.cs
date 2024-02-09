@@ -8,5 +8,6 @@ namespace HobbyCollection.Services
     {
         Task<List<SelectListItem>> getTagsList();
         void insertFavorite(FavoriteCreateViewModel viewModel);
+        void updateFavorite(Favorite favorite, FavoriteEditViewModel viewModel);
     }
 }

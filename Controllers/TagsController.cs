@@ -25,24 +25,6 @@ namespace HobbyCollection.Controllers
             return View(await _context.Tag.Where(tag => !tag.DeleteFlag).ToListAsync());
         }
 
-        // GET: Tags/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tag = await _context.Tag
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
-            {
-                return NotFound();
-            }
-
-            return View(tag);
-        }
-
         // GET: Tags/Create
         public IActionResult Create()
         {
@@ -143,28 +125,9 @@ namespace HobbyCollection.Controllers
             return View(tagToUpdate);
         }
 
-        // GET: Tags/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tag = await _context.Tag
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
-            {
-                return NotFound();
-            }
-
-            return View(tag);
-        }
-
-        // POST: Tags/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var tag = await _context.Tag.FindAsync(id);
             if (tag != null)

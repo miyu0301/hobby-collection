@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HobbyCollection.Data;
 using HobbyCollection.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HobbyCollection.Controllers
 {
+    [Authorize]
     public class TagsController : Controller
     {
         private readonly MainDbContext _context;

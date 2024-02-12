@@ -10,9 +10,11 @@ using HobbyCollection.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using HobbyCollection.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HobbyCollection.Controllers
 {
+    [Authorize]
     public class FavoritesController : Controller
     {
         private readonly MainDbContext _context;

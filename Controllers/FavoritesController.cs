@@ -19,9 +19,9 @@ namespace HobbyCollection.Controllers
     {
         private readonly MainDbContext _context;
         private readonly IFavoritesService _service;
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<FavoritesController> _logger;
 
-        public FavoritesController(MainDbContext context, IFavoritesService service, ILogger<HomeController> logger)
+        public FavoritesController(MainDbContext context, IFavoritesService service, ILogger<FavoritesController> logger)
         {
             _context = context;
             _service = service;
